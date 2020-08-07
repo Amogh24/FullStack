@@ -1,7 +1,0 @@
-import React from 'react'
-import ReactDom from 'reactdom'
-const App=()=>{
-<div>
-
-
-}
