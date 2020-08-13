@@ -5,13 +5,17 @@ const App = (props) => {
   const [selected, setSelected] = useState(0)
   const handleclick=()=>
   {
+    
     const t=anecdotes.length
     const idx=Math.floor((Math.random()*t))
-    return setSelected(selected+idx)
+    console.log("idx is",idx)
+    return setSelected(idx)
   }
+  console.log("final",selected)
   return (
     <div>
       <button onClick={handleclick}>next anecdote</button>
+      
      <p> {props.anecdotes[selected]}</p>
     </div>
   )
