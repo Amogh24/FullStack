@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+ const [votes,setVote]= useState(Array.apply(null, new Array(6)).map(Number.prototype.valueOf,0))
+ const [maxv,setMax]=useState(0)
   const handleclick=()=>
   {
     
@@ -11,12 +13,49 @@ const App = (props) => {
     console.log("idx is",idx)
     return setSelected(idx)
   }
+  const handlevote=()=>
+  {
+    const copy =[...votes]
+    copy[selected]+=1
+    setVote(copy) 
+    var max=votes[0]
+   var idxmax=0
+   for(var i=1;i<votes.length;i++)
+   {
+     if(max<votes[i])
+     {
+       max=votes[i]
+       idxmax=i
+     }
+   }
+   setMax(idxmax)
+  
+  }
+  /*const Maxvote=()=>
+  {
+   var max=props.arr[0]
+   var idxmax=0
+   for(var i=1;i<props.arr.length;i++)
+   {
+     if(max<props.arr[i])
+     {
+       max=props.arr[i]
+       idxmax=i
+     }
+   }
+   setMax(idxmax)
+  }
+  */
   console.log("final",selected)
   return (
     <div>
+      <h1>Anecdote of the day</h1>
+      <p> {props.anecdotes[selected]}</p>
+      <p>  has {votes[selected]} votes</p>
       <button onClick={handleclick}>next anecdote</button>
-      
-     <p> {props.anecdotes[selected]}</p>
+      <button onClick={handlevote}>vote</button>
+      <p>Anecdote with most votes </p>
+      <p>{props.anecdotes[maxv]}</p>
     </div>
   )
 }
