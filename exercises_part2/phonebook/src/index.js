@@ -51,8 +51,9 @@ const App = () => {
     const mnames=names.filter(name => 
       name.includes(newCheck)===true
     );
-    
-    console.log(mnames)
+    setPersons(persons.filter(p=>mnames.includes(p.name)))
+    console.log(persons)
+    //console.log(mnames)
     return mnames
   }
 
