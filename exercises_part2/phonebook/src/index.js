@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas',
-      number:39-44-5323523
-    }
-  ]) 
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ])
  
   const [ newName, setNewName ] = useState('') 
   const [newNumber,setNewNumber]= useState('')
@@ -24,7 +25,7 @@ const App = () => {
     var n
     n=names.includes(newperson.name)
     if(n){
-      window.alert (`${newperson.name}is already added to phonebook`)
+      window.alert (`${newperson.name} is already added to phonebook`)
     }
    else{ setPersons(persons.concat(newperson))
     setNewName('')
@@ -45,17 +46,16 @@ const App = () => {
 
   const handlecheck=(event)=>
   {
+    event.preventDefault()
     setCheck(event.target.value)
-    names.forEach(name => {
-      for(var i=0;i<newCheck.length;i++ )
-      {
-        console.log(newCheck)
-        if(name[i]===newCheck[i])
-         return name
-        else continue
-      }
-    });
+    const mnames=names.filter(name => 
+      name.includes(newCheck)===true
+    );
+    
+    console.log(mnames)
+    return mnames
   }
+
 
   const Persons=(props)=>
   {
