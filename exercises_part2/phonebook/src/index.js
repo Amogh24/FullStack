@@ -1,16 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import ReactDOM from 'react-dom'
+import axios from 'axios'
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
  
   const [ newName, setNewName ] = useState('') 
   const [newNumber,setNewNumber]= useState('')
   const [newCheck,setCheck]=useState('')
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons').then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  
+
   const names=persons.map(p=>p.name)
   
   const Addname=(event)=>
@@ -27,9 +33,17 @@ const App = () => {
     if(n){
       window.alert (`${newperson.name} is already added to phonebook`)
     }
-   else{ setPersons(persons.concat(newperson))
-    setNewName('')
-    setNewNumber('')
+   else{
+     axios.post( 'http://localhost:3001/persons',newperson).then(
+       response=>{
+        setPersons(persons.concat(newperson))
+        setNewName('')
+        setNewNumber('')
+       }
+     )
+
+     
+    
    }
   }
   const handlechange=(event)=>
@@ -46,11 +60,12 @@ const App = () => {
 
   const handlecheck=(event)=>
   {
-    event.preventDefault()
+    //event.preventDefault()
     setCheck(event.target.value)
+    
     const mnames=names.filter(name => 
-      name.includes(newCheck)===true
-    );
+      name.includes(newCheck)===true)
+    
     setPersons(persons.filter(p=>mnames.includes(p.name)))
     console.log(persons)
     //console.log(mnames)
