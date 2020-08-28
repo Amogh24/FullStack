@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import axios from 'axios'
+import services from './services'
+
 const App = () => {
   const [persons, setPersons] = useState([])
  
@@ -9,13 +10,18 @@ const App = () => {
   const [newCheck,setCheck]=useState('')
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons').then(response => {
+    services.getAll().then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
       })
   }, [])
-  
+  function search(nameKey, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].name === nameKey) {
+            return myArray[i].id;
+        }
+    }
+} 
 
   const names=persons.map(p=>p.name)
   
@@ -31,10 +37,16 @@ const App = () => {
     var n
     n=names.includes(newperson.name)
     if(n){
-      window.alert (`${newperson.name} is already added to phonebook`)
+     if(window.confirm (`${newperson.name} is already added to phonebook, replace old number with new one?`))
+     {
+       const checker=newperson.name
+       const id=search(checker,persons)
+       services.update(id,newperson)
+       
+     }
     }
    else{
-     axios.post( 'http://localhost:3001/persons',newperson).then(
+     services.create(newperson).then(
        response=>{
         setPersons(persons.concat(newperson))
         setNewName('')
@@ -47,19 +59,19 @@ const App = () => {
    }
   }
   const handlechange=(event)=>
-  {
+  {//newname
   console.log(event.target.value)
   setNewName(event.target.value)
   
   }
   const Handlenew=(event)=>
-  {
+  {//newnumber
     setNewNumber(event.target.value)
   }
   
 
   const handlecheck=(event)=>
-  {
+  {//newfilter
     //event.preventDefault()
     setCheck(event.target.value)
     
@@ -71,7 +83,7 @@ const App = () => {
     //console.log(mnames)
     return mnames
   }
-
+ 
 
   const Persons=(props)=>
   {
@@ -80,6 +92,13 @@ const App = () => {
     {
     return(<div key={p.name}>
     <p> {p.name} {p.number}</p>
+    <button onClick={()=>{
+       if (window.confirm("Do you really want to delete?"))
+       {
+         services.Delete(p.id)
+       }
+     }
+    } >delete</button>
       </div>
       )
     }
